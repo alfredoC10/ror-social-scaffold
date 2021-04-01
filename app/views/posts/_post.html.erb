@@ -11,6 +11,9 @@
   <p class="post-content">
     <%= post.content %>
   </p>
+  <span class="post-metrics">Number of comments: <strong><%= post.comments.count %></strong></span>
+  <span class="post-metrics">Number of likes: <strong><%= post.likes.count %></strong></span>
+
 
   <div class='post-comments-section'>
     <%= render partial: 'comments/comment', collection: post.comments %>
