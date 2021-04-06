@@ -17,10 +17,20 @@ class PostsController < ApplicationController
     end
   end
 
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to posts_path
+    flash[:error] = 'Post was destroyed!'
+  end
+
   private
 
   def timeline_posts
-    @timeline_posts ||= Post.all.ordered_by_most_recent.includes(:user)
+    list = current_user.friendships.map { |freund| freund.friend.id if freund.confirmed == true }
+    list += current_user.inverse_friendships.map { |freund| freund.user.id if freund.confirmed == true }
+    list += [current_user.id]
+    @timeline_posts ||= Post.where('user_id IN (?)', list).ordered_by_most_recent
   end
 
   def post_params
